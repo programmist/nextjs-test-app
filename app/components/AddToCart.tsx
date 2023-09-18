@@ -10,7 +10,9 @@ const AddToCart = () => {
       >
         Add To Cart
       </button>
-      <div className="line-through decoration-red-700">Quick brown fox</div>
+      <div className="line-through decoration-red-700 text-sky-900">
+        Quick brown fox
+      </div>
     </>
   );
 };
