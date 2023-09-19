@@ -14,5 +14,10 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  padding: 20px;
+}
+
+@layer base {
+  h1 {
+    @apply font-extrabold text-3xl mb-3;
+  }
 }
