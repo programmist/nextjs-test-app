@@ -1,14 +1,16 @@
 import React from "react";
 import UserTable from "./UserTable";
+import { sort } from "fast-sort";
 
-const UsersPage = () => {
-  // Note caching only happens in fetch function
-  // revalidate cache every 10 seconds
+interface Props {
+  searchParams: { sortOrder: string };
+}
 
+const UsersPage = ({ searchParams: { sortOrder } }: Props) => {
   return (
     <>
       <h1 className="font-bold">Users</h1>
-      <UserTable />
+      <UserTable sortOrder={sortOrder} />
     </>
   );
 };
