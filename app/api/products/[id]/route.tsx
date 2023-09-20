@@ -1,14 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
-import productService from "../products";
-import productSchema from "../schema";
 import prisma from "@/prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+import productSchema from "../schema";
 
 interface Props {
   params: { id: string };
 }
 
-export function GET(request: NextRequest, { params: { id } }: Props) {
-  const product = productService.get(parseInt(id));
+export async function GET(request: NextRequest, { params: { id } }: Props) {
+  const product = await prisma.product.findUnique({
+    where: { id: parseInt(id) },
+  });
   if (!product) {
     return NextResponse.json({ error: "Product not found" }, { status: 404 });
   } else {
@@ -23,18 +24,32 @@ export async function PUT(request: NextRequest, { params: { id } }: Props) {
   const valid = productSchema.safeParse(body);
   if (!valid.success) {
     return NextResponse.json({ error: valid.error.errors }, { status: 400 });
-  } else if (!productService.hasProduct(pId)) {
+  }
+
+  const existingProduct = await prisma.product.findUnique({
+    where: { id: pId },
+  });
+  if (!existingProduct) {
     return NextResponse.json({ error: "Product not found" }, { status: 404 });
   }
-  const updatedProduct = productService.update(body, pId);
+
+  const updatedProduct = await prisma.product.update({
+    where: { id: pId },
+    data: { name: body.name, price: parseFloat(body.price) },
+  });
   return NextResponse.json(updatedProduct);
 }
 
-export function DELETE(request: NextRequest, { params: { id } }: Props) {
+export async function DELETE(request: NextRequest, { params: { id } }: Props) {
   const pId = parseInt(id);
-  if (!productService.hasProduct(pId)) {
+
+  const product = await prisma.product.findUnique({
+    where: { id: pId },
+  });
+  if (!product) {
     return NextResponse.json({ error: "Product not found" }, { status: 404 });
   }
-  productService.delete(pId);
+
+  await prisma.product.delete({ where: { id: pId } });
   return NextResponse.json({});
 }

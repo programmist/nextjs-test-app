@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import productService from "./products";
-import productSchema from "./schema";
 import prisma from "@/prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+import productSchema from "./schema";
 
-export function GET(request: NextRequest) {
-  return NextResponse.json(productService.getAll());
+export async function GET(request: NextRequest) {
+  const products = await prisma.product.findMany();
+  return NextResponse.json(products);
 }
 
 export async function POST(request: NextRequest) {
@@ -13,10 +13,12 @@ export async function POST(request: NextRequest) {
   if (!valid.success) {
     return NextResponse.json({ error: valid.error.errors }, { status: 400 });
   }
-  const newProduct = productService.create({
-    id: productService.nextId(),
-    name: body.name,
-    price: body.price,
+
+  const newProduct = await prisma.product.create({
+    data: {
+      name: body.name,
+      price: body.price,
+    },
   });
   return NextResponse.json(newProduct);
 }
