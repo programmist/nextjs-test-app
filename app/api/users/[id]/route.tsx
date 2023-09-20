@@ -27,3 +27,14 @@ export async function PUT(request: NextRequest, { params: { id } }: UrlParams) {
   body = userService.updateUser(body, parseInt(id));
   return NextResponse.json(body);
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params: { id } }: UrlParams
+) {
+  if (!userService.hasUser(parseInt(id))) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+  userService.deleteUser(parseInt(id));
+  return NextResponse.json({});
+}

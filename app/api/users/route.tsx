@@ -14,7 +14,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Name is required" }, { status: 400 });
   }
 
-  const users = userService.getAll();
   const newUser = userService.createUser({
     id: userService.nextId(),
     name: body.name,

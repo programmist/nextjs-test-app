@@ -31,6 +31,9 @@ const userService = {
     users.push(created);
     return created;
   },
+  deleteUser(userId: number) {
+    users = users.filter((user) => user.id !== userId);
+  },
   hasUser(id: number) {
     return this.getUser(id) != null;
   },
