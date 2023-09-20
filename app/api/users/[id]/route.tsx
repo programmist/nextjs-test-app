@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import userService from "../users";
 import userSchema from "../schema";
+import prisma from "@/prisma/client";
 
 interface UrlParams {
   params: { id: string };
 }
 
-export function GET(
-  request: NextRequest,
-  { params: { id } }: UrlParams
-): NextResponse {
-  const user = userService.getUser(parseInt(id));
+export async function GET(request: NextRequest, { params: { id } }: UrlParams) {
+  const userId = parseInt(id);
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   } else {
