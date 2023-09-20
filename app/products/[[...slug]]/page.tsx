@@ -10,7 +10,7 @@ const ProductPage = ({
   return (
     <>
       <div>ProductPage: {slug?.join("/") ?? "Home"}</div>
-      <div>SortOrder param: "{sortOrder}"</div>
+      <div>SortOrder param: {sortOrder}</div>
     </>
   );
 };
