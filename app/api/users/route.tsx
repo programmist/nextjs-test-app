@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import userService from "./users";
-import userSchema from "./schema";
 import prisma from "@/prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+import userSchema from "./schema";
 
 // Note: According to Mosh, keeping the unused request param
 // will stop Next from caching the data from this function
