@@ -10,7 +10,6 @@ let users: User[] = [
   { id: 4, name: "Bill" },
 ];
 
-// TODO: find a way to cache this data to persist across requests
 const userService = {
   nextId() {
     return users.length + 1;
