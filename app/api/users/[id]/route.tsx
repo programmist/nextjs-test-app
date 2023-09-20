@@ -24,16 +24,35 @@ export async function GET(request: NextRequest, { params: { id } }: UrlParams) {
 export async function PUT(request: NextRequest, { params: { id } }: UrlParams) {
   let body = await request.json();
   const userId = parseInt(id);
-  const validation = userSchema.safeParse(body);
-  if (!validation.success) {
-    return NextResponse.json(
-      { error: validation.error.errors },
-      { status: 400 }
-    );
-  } else if (!userService.hasUser(userId)) {
+
+  const valid = userSchema.safeParse(body);
+  if (!valid.success) {
+    return NextResponse.json({ error: valid.error.errors }, { status: 400 });
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-  const updatedUser = userService.updateUser(body, userId);
+
+  // TODO: add DB uniqueness constraint on user.email
+  if (body.email) {
+    const duplicateEmailUser = await prisma.user.findUnique({
+      where: { email: body.email },
+    });
+    if (duplicateEmailUser) {
+      return NextResponse.json(
+        { error: "A user with this email already exists" },
+        { status: 400 }
+      );
+    }
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: { name: body.name, email: body.email },
+  });
+
   return NextResponse.json(updatedUser);
 }
 
