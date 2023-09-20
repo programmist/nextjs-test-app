@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import productService from "./products";
 import productSchema from "./schema";
+import prisma from "@/prisma/client";
 
 export function GET(request: NextRequest) {
   return NextResponse.json(productService.getAll());

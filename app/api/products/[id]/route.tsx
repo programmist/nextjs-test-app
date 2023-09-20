@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import productService from "../products";
 import productSchema from "../schema";
+import prisma from "@/prisma/client";
 
 interface Props {
   params: { id: string };
