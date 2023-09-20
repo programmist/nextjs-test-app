@@ -15,8 +15,9 @@ export async function POST(request: NextRequest) {
   }
 
   const users = userService.getAll();
-  return NextResponse.json(
-    { id: userService.nextId(), name: body.name },
-    { status: 201 }
-  );
+  const newUser = userService.createUser({
+    id: userService.nextId(),
+    name: body.name,
+  });
+  return NextResponse.json(newUser, { status: 201 });
 }
