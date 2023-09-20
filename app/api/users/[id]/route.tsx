@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import userService from "../users";
+import userSchema from "../schema";
 
 interface UrlParams {
   params: { id: string };
@@ -19,22 +20,28 @@ export function GET(
 
 export async function PUT(request: NextRequest, { params: { id } }: UrlParams) {
   let body = await request.json();
-  if (!body.name) {
-    return NextResponse.json({ error: "Name is required" }, { status: 400 });
-  } else if (!userService.hasUser(parseInt(id))) {
+  const userId = parseInt(id);
+  const validation = userSchema.safeParse(body);
+  if (!validation.success) {
+    return NextResponse.json(
+      { error: validation.error.errors },
+      { status: 400 }
+    );
+  } else if (!userService.hasUser(userId)) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-  body = userService.updateUser(body, parseInt(id));
-  return NextResponse.json(body);
+  const updatedUser = userService.updateUser(body, userId);
+  return NextResponse.json(updatedUser);
 }
 
 export async function DELETE(
   request: NextRequest,
   { params: { id } }: UrlParams
 ) {
-  if (!userService.hasUser(parseInt(id))) {
+  const userId = parseInt(id);
+  if (!userService.hasUser(userId)) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-  userService.deleteUser(parseInt(id));
+  userService.deleteUser(userId);
   return NextResponse.json({});
 }
