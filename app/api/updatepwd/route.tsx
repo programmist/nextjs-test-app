@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
         where: { email: body.email },
         data: { hashedPassword },
       });
-      return NextResponse.json({ status: 200 });
+      return NextResponse.json({});
     } else {
       return NextResponse.json(
         { error: "Old password is incorrect" },
