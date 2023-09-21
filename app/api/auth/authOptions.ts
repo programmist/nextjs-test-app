@@ -52,4 +52,16 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  events: {
+    async signIn(message) {
+      /* on successful sign in */
+    },
+    async signOut(message) {
+      /* on signout */
+    },
+    async createUser(message) {
+      /* user created */
+      //TODO: Redirect to home page or login page?
+    },
+  },
 };
