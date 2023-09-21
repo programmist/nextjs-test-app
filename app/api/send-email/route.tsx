@@ -4,21 +4,24 @@
 //   processes like new user creation, purchases, etc.
 
 import WelcomeTemplate from "@/emails/WelcomeTemplate";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  const body = await request.json();
   // must be sent from domain you own (not Gmail).
   // must be configured on resend.com/domains
   // Use Github Oauth login
+  // Can use onboarding@resend.dev for a few tests
+  // but don't rely on it
   await resend.emails.send({
-    from: "...",
+    from: "onboarding@resend.dev",
     to: "tony.childs@gmail.com",
-    subject: "Whatever",
-    react: <WelcomeTemplate name="Tony" />,
+    subject: "Hello World",
+    react: <WelcomeTemplate name={body.name} />,
   });
 
-  NextResponse.json({});
+  return NextResponse.json({});
 }
