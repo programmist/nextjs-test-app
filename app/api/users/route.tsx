@@ -1,12 +1,13 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import userSchema from "./schema";
+import { cleanEntities, cleanEntity } from "./cleanEntity";
 
 // Note: According to Mosh, keeping the unused request param
 // will stop Next from caching the data from this function
 export async function GET(request: NextRequest) {
   const users = await prisma.user.findMany();
-  return NextResponse.json(users);
+  return NextResponse.json(cleanEntities(users));
 }
 
 export async function POST(request: NextRequest) {
@@ -29,5 +30,5 @@ export async function POST(request: NextRequest) {
       email: body.email,
     },
   });
-  return NextResponse.json(newUser, { status: 201 });
+  return NextResponse.json(cleanEntity(newUser), { status: 201 });
 }

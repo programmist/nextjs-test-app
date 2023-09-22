@@ -57,12 +57,8 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// TODO: Fix TS compile errors by add models for Products and old users
-//       May need to change name of User or put these in different DB
-//       from the DB the auth models are in
-
-// model Product {
-//   id    Int    @id @default(autoincrement())
-//   name  String
-//   price Float  @default(0.00)
-// }
+model Product {
+  id    Int    @id @default(autoincrement())
+  name  String
+  price Float  @default(0.00)
+}
