@@ -3,11 +3,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/authOptions";
 import coffee from "../public/coffee.jpg";
 import { poppins, robotoMono } from "./layout";
+import { Metadata } from "next/types";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  console.log(poppins.variable);
-  console.log(poppins.className);
 
   return (
     <main className="relative h-screen">
@@ -28,4 +27,23 @@ export default async function Home() {
       /> */}
     </main>
   );
+}
+
+// metadata overrides of root layout
+// export const metadata: Metadata = {
+//   title: "...",
+//   description: "...",
+// };
+
+// generate metadata based on params
+export async function generateMetadata({
+  params: { productName },
+}: {
+  params: { productName: string };
+}): Promise<Metadata> {
+  // Note: Can also get data from prisma (db)
+  return {
+    title: `Product ${productName}`,
+    description: "...",
+  };
 }
