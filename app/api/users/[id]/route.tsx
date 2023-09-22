@@ -1,7 +1,7 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import userSchema from "../schema";
-import { cleanEntity } from "../cleanEntity";
+import selectFields from "../userPublicFields";
 
 interface UrlParams {
   params: { id: string };
@@ -10,12 +10,13 @@ interface UrlParams {
 export async function GET(request: NextRequest, { params: { id } }: UrlParams) {
   const user = await prisma.user.findUnique({
     where: { id },
+    select: selectFields,
   });
 
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   } else {
-    return NextResponse.json(cleanEntity(user));
+    return NextResponse.json(user);
   }
 }
 
@@ -47,9 +48,10 @@ export async function PUT(request: NextRequest, { params: { id } }: UrlParams) {
   const updatedUser = await prisma.user.update({
     where: { id },
     data: { name: body.name, email: body.email },
+    select: selectFields,
   });
 
-  return NextResponse.json(cleanEntity(updatedUser));
+  return NextResponse.json(updatedUser);
 }
 
 export async function DELETE(
