@@ -1,0 +1,21 @@
+.light-mode,
+.dark-mode {
+  display: none;
+  margin: 0 0.5rem;
+  font-weight: bold;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    display: inline-block;
+    color: #000;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .light-mode {
+    display: inline-block;
+    color: #fffb03;
+    text-shadow: 2px 2px 8px #fff;
+  }
+}

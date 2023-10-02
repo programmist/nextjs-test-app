@@ -1,6 +1,7 @@
 import { sort } from "fast-sort";
 import Link from "next/link";
 import React from "react";
+import "./UserTable.css";
 
 interface User {
   id: number;
